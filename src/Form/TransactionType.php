@@ -19,16 +19,16 @@ class TransactionType extends AbstractType
             ->add('date')
             ->add('PaymentMethod', EntityType::class, [
                 'class' => PaymentMethod::class,
-                'choice_label' => 'id',
+                'choice_label' => 'type',
             ])
             ->add('categories', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'multiple' => true,
             ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'id',
+                'choice_label' => 'email',
             ])
         ;
     }

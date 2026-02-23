@@ -15,11 +15,11 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('transactions', EntityType::class, [
-                'class' => Transaction::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
+//            ->add('transactions', EntityType::class, [
+//                'class' => Transaction::class,
+//                'choice_label' => 'id',
+//                'multiple' => true,
+//            ])
         ;
     }
 
