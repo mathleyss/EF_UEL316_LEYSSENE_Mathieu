@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -32,6 +34,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, PaymentMethod>
+     */
+    #[ORM\OneToMany(targetEntity: PaymentMethod::class, mappedBy: 'user')]
+    private Collection $paymentMethods;
+
+    /**
+     * @var Collection<int, Transaction>
+     */
+    #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'user')]
+    private Collection $transactions;
+
+    public function __construct()
+    {
+        $this->paymentMethods = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -106,5 +126,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
 
         return $data;
+    }
+
+    /**
+     * @return Collection<int, PaymentMethod>
+     */
+    public function getPaymentMethods(): Collection
+    {
+        return $this->paymentMethods;
+    }
+
+    public function addPaymentMethod(PaymentMethod $paymentMethod): static
+    {
+        if (!$this->paymentMethods->contains($paymentMethod)) {
+            $this->paymentMethods->add($paymentMethod);
+            $paymentMethod->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaymentMethod(PaymentMethod $paymentMethod): static
+    {
+        if ($this->paymentMethods->removeElement($paymentMethod)) {
+            // set the owning side to null (unless already changed)
+            if ($paymentMethod->getUser() === $this) {
+                $paymentMethod->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Transaction>
+     */
+    public function getTransactions(): Collection
+    {
+        return $this->transactions;
+    }
+
+    public function addTransaction(Transaction $transaction): static
+    {
+        if (!$this->transactions->contains($transaction)) {
+            $this->transactions->add($transaction);
+            $transaction->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTransaction(Transaction $transaction): static
+    {
+        if ($this->transactions->removeElement($transaction)) {
+            // set the owning side to null (unless already changed)
+            if ($transaction->getUser() === $this) {
+                $transaction->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
