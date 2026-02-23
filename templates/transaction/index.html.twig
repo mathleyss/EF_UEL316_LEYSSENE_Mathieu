@@ -11,6 +11,7 @@
                 <th>Id</th>
                 <th>Date</th>
                 <th>Category</th>
+                <th>PaymentMethod</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,8 +20,10 @@
             <tr>
                 <td>{{ transaction.id }}</td>
                 <td>{{ transaction.date ? transaction.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>L'affichage des catégories ne fonctionne pas</td>
+                <td>Ne fonctionne pas</td>
 {#                <td>{{ transaction.categories }}</td>#}
+                <td>Ne fonctionne pas</td>
+{#                <td>{{ transaction.paymentMethod }}</td>#}
                 <td>
                     <a href="{{ path('app_transaction_show', {'id': transaction.id}) }}">show</a>
                     <a href="{{ path('app_transaction_edit', {'id': transaction.id}) }}">edit</a>
